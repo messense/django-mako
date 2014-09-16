@@ -11,31 +11,39 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-
-from mako.lookup import TemplateLookup
+from __future__ import absolute_import, unicode_literals
 import tempfile
 
+from mako.lookup import TemplateLookup
+
+
 class MakoMiddleware(object):
+
+    lookup = None
+
     def __init__(self):
         """Setup mako variables and lookup object"""
         from django.conf import settings
-        # Set all mako variables based on django settings
-        global template_dirs, output_encoding, module_directory, encoding_errors
-        directories      = getattr(settings, 'MAKO_TEMPLATE_DIRS', settings.TEMPLATE_DIRS)
 
+        # Set all mako variables based on django settings
+        directories = getattr(
+            settings,
+            'MAKO_TEMPLATE_DIRS',
+            settings.TEMPLATE_DIRS
+        )
         module_directory = getattr(settings, 'MAKO_MODULE_DIR', None)
         if module_directory is None:
             module_directory = tempfile.mkdtemp()
 
         output_encoding  = getattr(settings, 'MAKO_OUTPUT_ENCODING', 'utf-8')
         encoding_errors  = getattr(settings, 'MAKO_ENCODING_ERRORS', 'replace')
-        
-        global lookup
-        lookup = TemplateLookup(directories=directories, 
-                                module_directory=module_directory,
-                                output_encoding=output_encoding, 
-                                encoding_errors=encoding_errors,
-                                )
+
+        self.lookup = TemplateLookup(
+            directories=directories,
+            module_directory=module_directory,
+            output_encoding=output_encoding,
+            encoding_errors=encoding_errors,
+        )
+
         import djangomako
-        djangomako.lookup = lookup
-    
+        djangomako.lookup = self.lookup

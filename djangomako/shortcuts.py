@@ -11,11 +11,12 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-
+from __future__ import absolute_import, unicode_literals
 from django.template import Context
 from django.http import HttpResponse
 
-import middleware
+from . import middleware
+
 
 def render_to_string(template_name, dictionary, context_instance=None):
     context_instance = context_instance or Context(dictionary)
@@ -29,9 +30,14 @@ def render_to_string(template_name, dictionary, context_instance=None):
     template = middleware.lookup.get_template(template_name)
     return template.render(**context_dictionary)
 
-def render_to_response(template_name, dictionary, context_instance=None, **kwargs):
+
+def render_to_response(template_name, dictionary,
+                       context_instance=None, **kwargs):
     """
     Returns a HttpResponse whose content is filled with the result of calling
     lookup.get_template(args[0]).render with the passed arguments.
     """
-    return HttpResponse(render_to_string(template_name, dictionary, context_instance), **kwargs)
+    return HttpResponse(
+        render_to_string(template_name, dictionary, context_instance),
+        **kwargs
+    )

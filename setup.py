@@ -13,32 +13,38 @@
 #   limitations under the License.
 
 from setuptools import setup, find_packages
-import os, sys
+import os
+import sys
+
+import djangomako
+
 
 PACKAGE_NAME = "django-mako"
-PACKAGE_VERSION = "0.1.4pre"
+PACKAGE_VERSION = djangomako.__version__
 
 SUMMARY = 'Django Mako'
 
-DESCRIPTION = """This module provides a drop in replacement of django templates for mako templates."""
+DESCRIPTION = 'django-mako provides a drop in replacement of django templates for mako templates.'  # NOQA
 
-setup(name=PACKAGE_NAME,
-      version=PACKAGE_VERSION,
-      description=SUMMARY,
-      long_description=DESCRIPTION,
-      author='Mikeal Rogers',
-      author_email='mikeal.rogers@gmail.com',
-      url='http://github.com/tuxdna/django-mako',
-      license='Apache 2.0',
-      include_package_data = True,
-      packages = find_packages(),
-      platforms =['Any'],
-      install_requires = ['django', 'mako'],
-      classifiers=['Development Status :: 4 - Beta',
-                   'Environment :: Console',
-                   'Intended Audience :: Developers',
-                   'License :: OSI Approved :: Apache Software License',
-                   'Operating System :: OS Independent',
-                   'Topic :: Software Development :: Libraries :: Python Modules',
-                  ],
-     )
+setup(
+    name=PACKAGE_NAME,
+    version=PACKAGE_VERSION,
+    description=SUMMARY,
+    long_description=DESCRIPTION,
+    author='Mikeal Rogers',
+    author_email='mikeal.rogers@gmail.com',
+    url='http://github.com/tuxdna/django-mako',
+    license='Apache 2.0',
+    include_package_data = True,
+    packages = find_packages(),
+    platforms =['Any'],
+    install_requires = ['django', 'mako'],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: OS Independent',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+)
