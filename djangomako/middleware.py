@@ -14,6 +14,7 @@
 from __future__ import absolute_import, unicode_literals
 import tempfile
 
+from django.utils.module_loading import import_by_path
 from mako.template import Template
 from ._lookup import TemplateLookup
 
@@ -40,6 +41,8 @@ class MakoMiddleware(object):
         output_encoding = getattr(settings, 'MAKO_OUTPUT_ENCODING', 'utf-8')
         encoding_errors = getattr(settings, 'MAKO_ENCODING_ERRORS', 'replace')
         template_class = getattr(settings, 'MAKO_TEMPLATE_CLASS', Template)
+        if isinstance(template_class, basestring):
+            template_class = import_by_path(template_class)
 
         global lookup
         lookup = TemplateLookup(
