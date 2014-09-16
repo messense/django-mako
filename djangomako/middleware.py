@@ -14,12 +14,14 @@
 from __future__ import absolute_import, unicode_literals
 import tempfile
 
-from mako.lookup import TemplateLookup
+from mako.template import Template
+from ._lookup import TemplateLookup
+
+
+lookup = None
 
 
 class MakoMiddleware(object):
-
-    lookup = None
 
     def __init__(self):
         """Setup mako variables and lookup object"""
@@ -35,15 +37,18 @@ class MakoMiddleware(object):
         if module_directory is None:
             module_directory = tempfile.mkdtemp()
 
-        output_encoding  = getattr(settings, 'MAKO_OUTPUT_ENCODING', 'utf-8')
-        encoding_errors  = getattr(settings, 'MAKO_ENCODING_ERRORS', 'replace')
+        output_encoding = getattr(settings, 'MAKO_OUTPUT_ENCODING', 'utf-8')
+        encoding_errors = getattr(settings, 'MAKO_ENCODING_ERRORS', 'replace')
+        template_class = getattr(settings, 'MAKO_TEMPLATE_CLASS', Template)
 
-        self.lookup = TemplateLookup(
+        global lookup
+        lookup = TemplateLookup(
             directories=directories,
             module_directory=module_directory,
             output_encoding=output_encoding,
             encoding_errors=encoding_errors,
+            template_class=template_class,
         )
 
         import djangomako
-        djangomako.lookup = self.lookup
+        djangomako.lookup = lookup
